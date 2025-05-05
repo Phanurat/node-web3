@@ -41,9 +41,12 @@ services:
     ports:
       - "6060:80"
     environment:
-      PMA_HOST: db
-      PMA_USER: admin
-      PMA_PASSWORD: 1111
+      - DB_HOST=db
+      - DB_USER=admin
+      - DB_PASSWORD=1111
+      - DB_DATABASE=database_contracts
+      - DB_PORT=3306
+
     depends_on:
       - db
     networks:

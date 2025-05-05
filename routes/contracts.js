@@ -4,9 +4,9 @@ const mysql = require('mysql2');
 
 // เชื่อมต่อฐานข้อมูล
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || 'db',  // ใช้ db เพื่อเชื่อมต่อกับ MySQL container
-  user: process.env.DB_USER || 'admin',
-  password: process.env.DB_PASSWORD || '1111',
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
   database: process.env.DB_DATABASE || 'database_contracts',
   port: process.env.DB_PORT || 3306
 });
