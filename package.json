@@ -1,6 +1,12 @@
 {
+  "name": "sm-web3-energy",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "express": "^4.17.1",
-    "mysql2": "^3.14.0"
+    "mysql2": "^2.2.5"
   }
 }

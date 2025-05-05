@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # ติดตั้ง dependencies
-RUN npm install
+RUN npm ci
 
 # คัดลอกโค้ดทั้งหมดจาก host ไปยัง container
 COPY . .

@@ -10,13 +10,21 @@ const db = mysql.createConnection({
   database: 'database_contracts'
 });
 
+// ตรวจสอบการเชื่อมต่อ
+db.connect((err) => {
+  if (err) {
+    console.error('Error connecting to the database:', err);
+  } else {
+    console.log('Connected to the MySQL database');
+  }
+});
+
 router.get('/contracts', (req, res) => {
   db.query('SELECT * FROM contracts ORDER BY id DESC', (err, results) => {
     if (err) return res.status(500).json({ error: err });
     res.json(results);
   });
 });
-
 
 router.post('/contracts', (req, res) => {
   const { id_contracts } = req.body;
