@@ -16,7 +16,6 @@ services:
       - DB_PORT=3306
     depends_on:
       - db
-    entrypoint: ["./wait-for-it.sh", "db:3306", "--", "npm", "start"]
     networks:
       - webnet
 
