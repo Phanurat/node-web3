@@ -2,23 +2,42 @@ const express = require('express');
 const router = express.Router();
 const mysql = require('mysql2');
 
-const db = mysql.createConnection({
-  host: 'db',           // <<< สำคัญ: เปลี่ยนจาก localhost เป็น 'db'
-  user: 'admin',
-  password: '1111',
-  database: 'database_contracts',
-  port: 3306
-});
+function connectWithRetry(retries = 10, delay = 3000) {
+  return new Promise((resolve, reject) => {
+    const tryConnect = () => {
+      const db = mysql.createConnection({
+        host: 'db',
+        user: 'admin',
+        password: '1111',
+        database: 'database_contracts',
+        port: 3306
+      });
 
-db.connect((err) => {
-  if (err) {
-    console.error('การเชื่อมต่อฐานข้อมูลล้มเหลว:', err);
-  } else {
-    console.log('เชื่อมต่อฐานข้อมูลสำเร็จ');
-  }
+      db.connect((err) => {
+        if (err) {
+          console.error(`การเชื่อมต่อฐานข้อมูลล้มเหลว (${retries}):`, err.code);
+          if (retries <= 0) return reject(err);
+          setTimeout(() => connectWithRetry(retries - 1, delay).then(resolve).catch(reject), delay);
+        } else {
+          console.log('เชื่อมต่อฐานข้อมูลสำเร็จ');
+          resolve(db);
+        }
+      });
+    };
+
+    tryConnect();
+  });
+}
+
+let db;
+connectWithRetry().then((connection) => {
+  db = connection;
+}).catch(() => {
+  process.exit(1); // ปิดถ้าเชื่อมไม่ได้จริงๆ
 });
 
 router.get('/contracts', (req, res) => {
+  if (!db) return res.status(500).json({ error: 'ยังไม่ได้เชื่อมต่อฐานข้อมูล' });
   db.query('SELECT * FROM contracts ORDER BY id DESC', (err, results) => {
     if (err) return res.status(500).json({ error: err });
     res.json(results);
@@ -27,7 +46,6 @@ router.get('/contracts', (req, res) => {
 
 router.post('/contracts', (req, res) => {
   const { id_contracts } = req.body;
-
   if (!id_contracts) {
     return res.status(400).json({ error: 'กรุณาระบุ id_contracts' });
   }
