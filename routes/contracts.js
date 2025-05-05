@@ -4,7 +4,7 @@ const mysql = require('mysql2');
 
 // เชื่อมต่อฐานข้อมูล
 const db = mysql.createConnection({
-  host: 'localhost',
+  host: 'sm-web3-energy_db',
   user: 'admin',
   password: '1111',
   database: 'database_contracts'
