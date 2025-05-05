@@ -16,9 +16,19 @@ app.listen(port, '0.0.0.0', () => {
   console.log(`Server running at http://0.0.0.0:${port}`);
 });
 
+const mysql = require('mysql2');
+
+// เชื่อมต่อฐานข้อมูล
+const db = mysql.createConnection({
+  host: 'db',
+  user: 'admin',
+  password: '1111',
+  database: 'database_contracts'
+});
+
 db.connect((err) => {
   if (err) {
-    console.error('Error connecting to database:', err);
+    console.error('Error connecting to the database:', err);
   } else {
     console.log('Connected to the MySQL database');
   }
