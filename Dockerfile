@@ -17,4 +17,5 @@ COPY . .
 EXPOSE 3000
 
 # คำสั่งเริ่มต้นที่ container จะรัน
-CMD ["node", "server.js"]
+RUN apt-get update && apt-get install -y wait-for-it
+CMD ["wait-for-it", "db:3306", "--", "node", "server.js"]
